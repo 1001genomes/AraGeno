@@ -1,0 +1,53 @@
+{% extends "base.html" %} {% block content %}
+<a name="top"></a>
+<div class="site-hero mdl-typography--text-center">
+    <div class="logo-font site-slogan">An easy way to identify your <br>Arabidopsis thaliana plant</div>
+    <a href="#screens">
+        <button class="site-fab mdl-button mdl-button--colored mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+        <i class="material-icons">expand_more</i>
+    </button>
+    </a>
+</div>
+<section class="site-section mdl-typography--text-center">
+    <div class="resp-content">
+        <a name="screens"></a>
+        <div class="mdl-typography--display-2 mdl-typography--font-thin">What do you want to do ? </div>
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--6-col">
+                <h3 class="mdl-typography--display-1 mdl-typography--font-thin"><i class="material-icons md-48">colorize</i> Genotype your sample</h3>
+                <p class="mdl-typography--text-left">
+                Large-scale population genetic analyses require huge sample numbers, which bears a high risk of contamination. There is an increasing need for verifying the identity of a sample efficiently and economically. Modern sequencing technology has greatly improved over the past decade by reducing time and costs per sample, which makes genotyping-by-sequencing being a convenient approach for sample verification. We prepare Arabidopsis thaliana whole-genome libraries based on the tagmentation methodology and perform sequencing of high-plexed libraries. Over the last years we gained experiences in high-throughput whole-genome sequencing and optimized our protocols towards rapid turnover and low costs. If you wish to genotype you samples please send us a request.
+                </p>
+                <h4>Coming soon!</h4>
+                <a href="mailto:ilka.reichardt@gmi.oeaw.ac.at" class="valign-center mdl-button mdl-js-button mdl-button--colored mdl-button--accent mdl-button--raised">
+                    <i class="material-icons">mail</i><span>Contact Us!</span>
+                </a>
+            </div>
+            <div class="mdl-cell mdl-cell--6-col">
+                <h3 class="mdl-typography--display-1 mdl-typography--font-thin"><i class="material-icons">fingerprint</i> Identify your A. thaliana</h3>
+                <p class="mdl-typography--text-left">
+                Genotyping a sample with high-coverage sequencing is expensive, whereas low-coverage is highly error prone. Now with more than 1000 Arabidopsis thaliana high-quality genomes available, genotyping can be simple by identifying the natural lines (accessions) that matches to the sample of interest. Hence we have developed SNPmatch, a tool that identifies the most likely accession with a minimum number of SNPs. This makes it an efficient and reliable tool for low-coverage sequencing data. SNPmatch can identify inbreds but can also be applied to identify the parents in a F1 or F2 population. If you wish to identify your plant you just need to upload your vcf file.<br><br><br>
+                </p>
+                <h4>&nbsp;</h4>
+                <a href="{% url 'upload_genotype' %}" class="valign-center mdl-button mdl-js-button mdl-button--colored mdl-button--accent mdl-button--raised">
+                    <i class="material-icons">fingerprint</i><span>Identify your plant</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="site-section site-section--grey">
+    <div class="resp-content">
+        <div class="help mdl-grid mdl-typography--text-center">
+            <div class="mdl-cell mdl-cell--6-col">
+                <h3 class="mdl-typography--font-thin">Questions?</h3>
+                <p>Check out the <a href="{% url 'faq' %}">FAQs</a>.</p>
+            </div>
+            <div class="mdl-cell mdl-cell--6-col">
+                <h3 class="mdl-typography--font-thin">Contact us</h3>
+                <p>Send us an <a href="mailto:ilka.reichardt@gmi.oeaw.ac.at" >email</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

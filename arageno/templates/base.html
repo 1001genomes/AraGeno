@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="A genotyping service for Arabidopsis thaliana">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+        <title>{% block title %}AraGeno - A genotyping service for Arabiodpsis thaliana{% endblock title %}</title>
+
+        <!-- Add to homescreen for Chrome on Android -->
+        <meta name="mobile-web-app-capable" content="yes">
+        <!--<link rel="icon" sizes="192x192" href="{% static 'img/android-desktop.png' %}">-->
+
+        <!-- Add to homescreen for Safari on iOS -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-title" content="AraGeno">
+        <!--<link rel="apple-touch-icon-precomposed" href="{% static 'img/ios-desktop.png' %}">-->
+
+        <!-- Tile icon for Win8 (144x144 + tile color) -->
+        <!--<meta name="msapplication-TileImage" content="{% static 'img/touch/ms-touch-icon-144x144-precomposed.png' %}">-->
+        <meta name="msapplication-TileColor" content="#3372DF">
+
+        <!--<link rel="shortcut icon" href="{% static 'img/favicon.png' %}">-->
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,700" type="text/css">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.green-blue.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.3.0/lodash.min.js"></script>
+        <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+        <script src="https://unpkg.com/vue@2.0.5/dist/vue.js"></script>
+        
+        <script src="{% static 'js/vue-charts.js' %}"></script>
+        <!--<script src="{% static 'js/vue-charts.min.js' %}"></script>-->
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+        
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+            Vue.config.delimiters = ['${', '}'];
+
+            //ga('create', 'UA-26150757-7', 'auto');
+            //ga('send', 'pageview');
+        </script>
+    </head>
+
+    <body>
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <div class="site-header mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                    <span class="site-title mdl-layout-title">
+                        <a href="{% url 'index' %}">
+                            <img class="site-logo-image" src="{% static 'img/logo.png' %}" alt="AraGeno">
+                        </a>
+                    </span>
+                    <div class="site-header-spacer mdl-layout-spacer"></div>
+                    <div class="site-navigation-container">
+                        <nav class="site-navigation mdl-navigation">
+                            <a class="mdl-navigation__link mdl-typography--text-uppercase" href="{% url 'faq' %}">Faq</a>
+                            <!--<a class="mdl-navigation__link mdl-typography--text-uppercase" href="">Sign In</a>-->
+                        </nav>
+                    </div>
+                    <span class="site-mobile-title mdl-layout-title">
+                        <img class="site-logo-image" src="{% static 'img/logo.png' %}">
+                    </span>
+                </div>
+            </div>
+            <main class="site-content mdl-layout__content">
+                {% block content %}{% endblock content %}
+                <div class="mdl-layout-spacer"></div>
+                <footer class="mdl-mini-footer">
+                    <div class="mdl-mini-footer__left-section">
+                        <div class="mdl-logo">AraGeno</div>
+                        <ul class="mdl-mini-footer__link-list">
+                            <li><a href="{% url 'faq' %}">FAQ</a></li>
+                            <!--<li><a href="#">Privacy & Terms</a></li>-->
+                            <li><a href="{% url 'about' %}">About</a></li>
+                        </ul>
+                    </div>
+                </footer>
+            </main>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="site-section">
+    <div class="resp-content">
+        <h1 class="mdl-typography--display-2 mdl-typography--font-thin mdl-typography--text-center">
+            Status of identification
+        </h1>
+
+        <form class="delete-form mdl-typography--text-center" action="" method="post">
+            {% csrf_token %}
+            <h3>Are you sure you want to delete the submission ? </h3>
+            <br>
+            <button class="mdl-button mdl-js-button  mdl-button--delete mdl-button--raised" type="submit" name="action">
+                <i class="material-icons">delete</i> Confirm
+            </button>
+        </form>
+    </div>
+</section>
+{% endblock content %}

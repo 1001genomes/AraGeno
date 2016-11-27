@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="site-section">
+    <div class="resp-content">
+        <h1 class="mdl-typography--display-2 mdl-typography--font-thin mdl-typography--text-center">Identify a sample</h1>
+        <p>
+            To identify a sample just upload a file in VCF format (<a href="https://raw.githubusercontent.com/Gregor-Mendel-Institute/SNPmatch/master/sample_files/701_501.filter.vcf" target="_blank">sample</a>) or in BED format (<a href="https://raw.githubusercontent.com/Gregor-Mendel-Institute/SNPmatch/master/sample_files/701_502.filter.bed" target="_blank">sample</a>) 
+            and specify your name and email address as well as the dataset the identifcation should be 
+            checked against.   
+        </p>
+        <div class="form">
+             <form class="mdl-grid" action="{% url 'upload_genotype' %}" method="post" enctype="multipart/form-data" >
+                {% csrf_token %}
+                <div class="mdl-cell mdl-cell--6-col">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        {{ form.firstname }}
+                        <label class="mdl-textfield__label" for="{{ form.firstname.id_for_label }}">First Name</label>
+                    </div>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        {{ form.lastname }}
+                        <label class="mdl-textfield__label" for="{{ form.lastname.id_for_label }}">Last Name</label>
+                    </div>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        {{ form.email }}
+                        <label class="mdl-textfield__label" for="{{ form.email.id_for_label }}">Email</label>
+                        <span class="mdl-textfield__error">Not a valid email address</span>
+                    </div>
+                    {% if form.non_field_errors %}
+                        <h3 class="center-align">
+                            {{ form.non_field_errors }}
+                        </h3>
+                    {% endif %}
+                </div>
+                <div class="mdl-cell mdl-cell--6-col">
+                    <div class="upload-dropzone">
+                        <h4>Drag files here or click to upload</h4>
+                    </div>
+                    <div class="result-dropzone">
+                        <h4 id="file-result"></h4>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--12-col">
+                    <button id="submit" type="submit" disabled class="mdl-button mdl-js-button mdl-button--colored mdl-button--accent mdl-button--raised">Identify</button>
+                    <button type="reset" onclick="resetForm()" text="Cancel" class="mdl-button mdl-js-button mdl-button--raised">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+(function(window) {
+    var resultEle = window.document.querySelector('.result-dropzone');
+    var resultText = window.document.querySelector('#file-result');
+    var dropZoneEle = window.document.querySelector('.upload-dropzone');
+    var submitBtn = window.document.querySelector('#submit');
+    var fields = document.querySelectorAll('input.mdl-textfield__input');
+    var input =  null;
+    function resetForm() {
+        input.value = null;
+        input.dispatchEvent(new Event('change'));
+        [].forEach.call(fields, function(field) {
+            field.removeAttribute('value');
+            field.dispatchEvent(new Event('reset'));
+        }); 
+    }
+
+    function triggerCallback(e, callback) {
+      if(!callback || typeof callback !== 'function') {
+        return;
+      }
+      var files;
+      if(e.dataTransfer) {
+        files = e.dataTransfer.files;
+      } else if(e.target) {
+        files = e.target.files;
+      }
+      callback.call(null, files);
+    }
+    function makeDroppable(ele, callback) {
+      input = document.createElement('input');
+      input.setAttribute('type', 'file');
+      input.setAttribute('name','genotype_file');
+      input.style.display = 'none';
+      input.addEventListener('change', function(e) {
+        triggerCallback(e, callback);
+      });
+      ele.appendChild(input);
+      
+      ele.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        ele.classList.add('dragover');
+      });
+
+      ele.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        ele.classList.remove('dragover');
+      });
+
+      ele.addEventListener('drop', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        ele.classList.remove('dragover');
+        triggerCallback(e, callback);
+      });
+      
+      ele.addEventListener('click', function() {
+        input.value = null;
+        input.click();
+      });
+    }
+
+    function checkFile(file) {
+        var name = file.name.split(".");
+        if (name.length == 0) {
+            return false;
+        }
+        var extIdx = name.length-1;
+        if (name[extIdx] === 'vcf' || name[extIdx] === 'bed') {
+            return true;
+        }
+        return false;
+    }
+
+    function updateDropZone(files) {
+        var hasFiles = files.length > 0;
+        var isValid = false;
+        resultEle.classList.remove('valid');
+        resultEle.classList.remove('invalid');
+        submitBtn.setAttribute('disabled','true');
+        if (hasFiles) {
+            isValid = checkFile(files[0]);
+            resultText.innerText='The file ' + files[0].name+' is '+ (isValid ? 'valid': 'invalid');
+            if (isValid) {
+                submitBtn.removeAttribute('disabled');
+            }
+        }
+        dropZoneEle.style='display:'+ (hasFiles ? 'none' : 'block');
+        resultEle.style='display:'+ (hasFiles ? 'block' : 'none');
+        //TODO check file extension
+        resultEle.classList.add(isValid ? 'valid' : 'invalid');
+    }
+
+    makeDroppable(dropZoneEle, updateDropZone);
+    window.resetForm = resetForm;
+  })(this);
+</script>
+{% endblock content %}

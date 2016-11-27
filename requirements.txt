@@ -1,0 +1,10 @@
+django==1.10.3
+fabric==1.12.0
+pika==0.10.0
+pylint==1.6.4
+pylint-django==0.7.2
+autopep8==1.2.4
+djangorestframework==3.5.3
+djangorestframework-camel-case==0.2.0
+requests==2.12.1
+seaborn==0.7.1

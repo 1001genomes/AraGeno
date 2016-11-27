@@ -1,0 +1,138 @@
+{% extends "base.html" %} {% block content %}
+<section class="site-section">
+    <div class="resp-content">
+        <div class="mdl-grid">
+            <aside class="mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet">
+                <nav class="faq-navigation">
+                    <ul class="faq-navigation__list mdl-list">
+                        <li class="mdl-list__item">
+                            <span class="mdl-list__item-primary-content">
+                                <a href="#general">General</a>
+                            </span>
+                        </li>
+                        <li class="mdl-list__item">
+                            <span class="mdl-list__item-primary-content">
+                                <a href="#genotyping">Identifying a plant</a>
+                            </span>
+                        </li>
+                        <li class="mdl-list__item">
+                            <span class="mdl-list__item-primary-content">
+                                <a href="#genotyping">Genotyping a sample</a>
+                            </span>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+            <div class="mdl-cell mdl-cell--8-col mdl-cell--12-col-tablet">
+                <h1 class="mdl-typography--display-2 mdl-typography--font-thin mdl-typography--text-nowrap">Frequently Asked Questions</h1>
+                <section class="faq-content">
+                    <a id="general"></a>
+                    <h4 class="faq-content__title">General</h4>
+                    <div class="faq-content__question question">
+                        <div class="question__question">
+                           <h5>What is AraGeno?</h5>
+                        </div>
+                        <div class="question__answer">
+                            The AraGeno service allows researchers to identify their Arabidopsis thaliana plants. 
+                            There are two distinct services that are provided: 
+                            <ul><li><b>Identifying a plant</b>: Users can upload the genotype data of a A.thaliana plant and we will identify the corresponding line</li> 
+                            <li><b>Genotyping a sample</b>: Users can send a samples of a plant and we will genotype them and additionally identify the line</li>
+                            </ul>  
+                        </div>
+                    </div>
+                    <div class="faq-content__question question">
+                        <div class="question__question">
+                           <h5>How much does it cost?</h5>
+                        </div>
+                        <div class="question__answer">
+                             Under construction 
+                        </div>
+                    </div>
+                </section>
+                <section class="faq-content">
+                    <a id="genotyping"></a>
+                    <h4 class="faq-content__title">Identifying a sample</h4>
+                    <div class="faq-content__question question">
+                        <div class="question__question">
+                           <h5>How does it work?</h5>
+                        </div>
+                        <div class="question__answer">
+                            <a href="https://github.com/Gregor-Mendel-Institute/SNPMatch" target="_blank">SNPmatch</a> can genotype samples efficiently and economically using a simple likelihood approach.
+                            This approach allows SNPmatch to genotype samples with as low as 5000 informative SNPs.  
+                        </div>
+                    </div>
+                    <div class="faq-content__question question">
+                        <div class="question__question">
+                           <h5>How long does it take?</h5>
+                        </div>
+                        <div class="question__answer">
+                            SNPmatch is a python script taking about 18 seconds for the entire analysis, to compare 500000 SNPs to the 10.7 million markers in the reference database (1001 SNP matrix)  
+                        </div>
+                    </div>
+                    <div class="faq-content__question question">
+                        <div class="question__question">
+                           <h5>Which input files are supported?</h5>
+                        </div>
+                        <div class="question__answer">
+                            Presently, AraGenotyper takes input files with two different formats, BED and VCF. 
+                            The bed file is a three column file with chr, position and genotype tab-separated. 
+                            An example is given below
+                            <pre>
+1 125 0/0
+1 284 0/0
+1 336 0/0
+1 346 1/1
+1 353 0/0
+1 363 0/0
+1 465 0/0
+1 471 0/1
+1 540 0/0
+1 564 0/0
+1 597 0/0
+1 612 1/1
+1 617 0/1
+                            </pre>
+                            The SNPs can be even phased (0|0). 
+                            Chromosome names such as Chr1, Chr2 instead of 1, 2 are also parsed.<br><br>
+
+                            The VCF file has a default format detailed in <a href="http://gatkforums.broadinstitute.org/gatk/discussion/1268/what-is-a-vcf-and-how-should-i-interpret-it" target="_blank">here</a>. 
+                            The main arguments SNPmatch requires is CHROM and POS in header and GT in the INFO column.
+
+                            Sample files for both BED and VCF format can be downloaded in the official <a href="https://github.com/Gregor-Mendel-Institute/SNPmatch/tree/master/sample_files" target="_blank">SNPMatch github repository</a>   
+                        </div>
+                    </div>
+                </section>
+                <section class="faq-content">
+                    <a id="genotyping"></a>
+                    <h4 class="faq-content__title">Genotyping a plant</h4>
+                    <div class="faq-content__question question">
+                        <div class="question__question">
+                           <h5>How does it work?</h5>
+                        </div>
+                        <div class="question__answer">
+                            Under construction  
+                        </div>
+                    </div>
+                    <div class="faq-content__question question">
+                        <div class="question__question">
+                           <h5>How much does it cost?</h5>
+                        </div>
+                        <div class="question__answer">
+                            Under construction  
+                        </div>
+                    </div>
+                    <div class="faq-content__question question">
+                        <div class="question__question">
+                           <h5>How long does it take?</h5>
+                        </div>
+                        <div class="question__answer">
+                            Under construction  
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

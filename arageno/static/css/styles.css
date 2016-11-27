@@ -1,0 +1,345 @@
+/**
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+body {
+    margin: 0;
+    background-color: #fff;
+    color: #757575;
+    font-family: 'Roboto', 'Helvetica', 'Arial' ,sans-serif;
+    font-weight: 300;
+    text-rendering: optimizeLegibility
+
+}
+/* Disable ugly boxes around images in IE10 */
+
+a img {
+    border: 0px;
+}
+
+
+::-moz-selection {
+    background-color: #6ab344;
+    color: #fff;
+}
+::selection {
+    background-color: #6ab344;
+    color: #fff;
+}
+.site-header .mdl-layout__header-row {
+    max-width: 980px;
+    max-width: 61.25rem;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+}
+.site-header .mdl-menu__container {
+    z-index: 50;
+    margin: 0 !important;
+}
+.mdl-textfield--expandable {
+    width: auto;
+}
+.site-mobile-title {
+    display: none !important;
+}
+.site-logo-image {
+    height: 28px;
+    width: 140px;
+}
+.site-header {
+    overflow: visible;
+    background-color: white;
+}
+.site-header .material-icons {
+    color: #767777 !important;
+}
+.site-header .mdl-layout__drawer-button {
+    background: transparent;
+    color: #767777;
+}
+.site-header .mdl-navigation__link {
+    color: #757575;
+    font-weight: inherit;
+    font-size: 14px;
+}
+
+.site-content {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-flow: column nowrap;
+    -ms-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+}
+
+.site-content > *:not(.mdl-layout-spacer) {
+    -webkit-flex: none;
+    -ms-flex: none;
+    flex: none;
+}
+
+.site-navigation-container {
+    /* Simple hack to make the overflow happen to the left instead... */
+
+    direction: rtl;
+    order: 1;
+    width: 500px;
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.site-navigation {
+    /* ... and now make sure the content is actually LTR */
+
+    direction: ltr;
+    justify-content: flex-end;
+    width: 800px;
+}
+.site-navigation .mdl-navigation__link {
+    display: inline-block;
+    height: 60px;
+    line-height: 68px;
+    background-color: transparent !important;
+    border-bottom: 4px solid transparent;
+}
+.site-navigation .mdl-navigation__link:hover {
+    border-bottom: 4px solid #8bc34a;
+}
+
+.site-fab {
+    margin-bottom: -1.75rem;
+    bottom: 0;
+    color: #448aff;
+    left: 50%;
+    position: absolute;
+}
+.site-drawer-separator {
+    height: 1px;
+    background-color: #dcdcdc;
+    margin: 8px 0;
+}
+
+.site-hero {
+    position: relative;
+    width: auto;
+    background-color: #f3f3f3;
+    /*background: url('images/slide01.jpg') center 30% no-repeat;*/
+
+    background-size: cover;
+
+}
+.logo-font {
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    line-height: 1;
+    color: #767777;
+    font-weight: 100;
+}
+.site-slogan {
+    font-size: 60px;
+    padding: 12% 5%;
+}
+error-
+.site-sub-slogan {
+    font-size: 21px;
+    padding-top: 24px;
+}
+
+.site-section {
+    position: relative;
+    padding-top: 60px;
+    padding-bottom: 80px;
+
+}
+.resp-content {
+    max-width: 980px;
+    max-width: 70rem;
+    margin: 0 auto;
+}
+.help {
+    color:#474747;
+}
+
+
+.site-section--grey {
+    background-color: #f6f6f6;
+}
+
+.faq-navigation {
+    position:fixed;
+}
+.faq-navigation__list  a {
+    text-decoration: none;
+}
+.faq-navigation .mdl-list__item {
+    border-left: 2px solid #ccc;
+}
+.faq-content__title {
+    margin-top:80px;
+    margin-bottom:20px;
+    color: #424242;
+}
+.question__question {
+    color: #424242;
+}
+.faq-content h5 {
+    font-weight:300;
+}
+
+.faq_content__question.question {
+    margin-bottom:24px;
+}
+.question__answer {
+    font-size:16px;
+}
+
+.upload-dropzone,.result-dropzone {
+    background: rgb(68,138,255);
+    color: #fff;
+    padding: 100px 0;
+    text-align: center;
+}
+
+.result-dropzone {
+    display:none;
+}
+
+.result-dropzone.valid {
+    background: #00CC71;
+}
+
+.result-dropzone.invalid {
+    background: #F44336;
+}
+
+.upload-dropzone.dragover {
+    background: #00CC71;
+}interpretation
+.errorlist {
+    color:#F44336;
+}
+
+.progress {
+    top:50%;
+}
+.mdl-button--delete,.mdl-button--delete:hover {
+    color:white;
+    background-color:#F44336;
+}
+.delete-form {
+    padding-top:100px;
+}
+.genotype-info, .identify-info {
+    width:100% !important;
+}
+
+.identify-info {
+    margin-bottom:20px;
+}
+
+.mdl-card__chart {
+    /*padding:16px;
+    width:90%;*/
+}
+
+.chart_container {
+    height:350px;
+    width:100%;
+}
+.map-chart {
+    height:340px;
+    width:100%;
+    margin-top:10px;
+}
+.interpretation--ok {
+    color: #4CAF50;
+}
+.interpretation--error {
+    color:#FF5722;
+}
+
+.interpretation--processing {
+    color: #2196F3;
+}
+
+.job-status--finished {
+    color: #4CAF50;
+}
+.job-status--processing {
+    color: #2196F3;
+}
+.job-status--error {
+    color: #F44336;
+}
+
+.crosses_table__row--parent {
+    color: #2196F3;
+    font-weight:600;
+}
+
+
+.valign-center {
+    display: inline-flex;
+    vertical-align: middle;
+    align-items: center;
+}
+.valign-center i {
+    margin-right:10px;
+}
+
+.overlap-label {
+    top: calc(50%);
+    left: calc(50% - 15px);
+    position: absolute;
+    z-index: 1;
+}
+
+.window-plot {
+    display:block;
+    margin: auto;
+}
+
+/**** Mobile layout ****/
+
+@media (max-width: 900px) {
+    .site-navigation-container {
+        display: none;
+    }
+    .site-title {
+        display: none !important;
+    }
+    .site-mobile-title {
+        display: block !important;
+        position: absolute;
+        left: calc(50% - 70px);
+        top: 12px;
+        transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .site-hero {
+        height: 350px;
+    }
+    .site-slogan {
+        font-size: 26px;
+        margin: 0 16px;
+        padding-top: 24px;
+    }
+    .site-sub-slogan {
+        font-size: 16px;
+        margin: 0 16px;
+        padding-top: 8px;
+    }
+    .site-fab {
+        display: none;
+    }
+}
