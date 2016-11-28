@@ -14,13 +14,20 @@ from django.conf import settings
 BASE_DIR = '/lustre/scratch/users/%s/GENOTYPER/' % settings.HPC_USER
 SUBMIT_SCRIPT_FOLDER = os.path.join(os.path.dirname(__file__),'submit_script_templates/')
 
+class FabricException(Exception):
+    pass
+
+
 env.use_ssh_config = True
+env.abort_on_prompts = True
+env.skip_bad_hosts = True
+env.abort_exception = FabricException
 
 env.roledefs = {
     'login': ['login.mendel.gmi.oeaw.ac.at'],
     'dmn': ['dmn0.mendel.gmi.oeaw.ac.at'],
 }
-env.skip_bad_hosts = True
+
 
 
 @roles('dmn')

@@ -41,6 +41,12 @@ STATUS_CHOICES = (
 )
 
 
+def delete_upload_folder(instance):
+    if not instance or not instance.genotype_file:
+        return
+    folder = os.path.dirname(instance.genotype_file.path)
+    instance.genotype_file.delete(False)
+    shutil.rmtree(folder, ignore_errors=True)
 
 def calculate_finish_date(num_of_markers, start_date, polynominal):
     """Calculates the finish date"""
@@ -277,10 +283,7 @@ AraGeno Team
 @receiver(post_delete, sender=GenotypeSubmission)
 def genotypesubmission_delete(sender, instance, **kwargs):
     # Pass false so FileField doesn't save the model.
-    folder = os.path.dirname(instance.genotype_file.path)
-    instance.genotype_file.delete(False)
-    shutil.rmtree(folder, ignore_errors=True)
-
+    delete_upload_folder(instance)
 
 
 

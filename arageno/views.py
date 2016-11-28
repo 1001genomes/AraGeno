@@ -1,18 +1,21 @@
 '''
 Views for Genotyper
 '''
+import os
 from django.shortcuts import render
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from forms import UploadFileForm
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.views.generic import DetailView
+from django.db import transaction
 from django.views.generic.edit import DeleteView, UpdateView
-from models import GenotypeSubmission
+from models import GenotypeSubmission, delete_upload_folder
 from serializers import GenotypeSubmissionSerializer
 from djangorestframework_camel_case.render import CamelCaseJSONRenderer
 from services import start_identify_pipeline
 import logging,traceback
+from hpc import FabricException
 
 
 logger = logging.getLogger(__name__)
@@ -35,7 +38,7 @@ def about(request):
     '''about'''
     return render(request, 'about.html')
 
-
+@transaction.atomic
 def upload_genotype(request):
     '''
     Upload genotype for identify service
@@ -48,9 +51,10 @@ def upload_genotype(request):
                 start_identify_pipeline(submission)
                 return HttpResponseRedirect(submission.get_absolute_url())
             except Exception as err:
-                print(traceback.format_exc())
-                logger.error(repr(err))
-                form.add_error(None, str(err))
+                if submission and submission.genotype_file:
+                    delete_upload_folder(submission)
+                raise err
+
     else:
         form = UploadFileForm()
     return render(request, 'upload_genotype.html', {'form': form})
