@@ -21,16 +21,21 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            'amqp_host', default='amqp.openstack.gmi.oeaw.ac.at/HPC')
+            'amqp_host')
+        parser.add_argument('--queue', dest='queue', 
+        default='arageno', help='Name of the queue to listen for HPC job messages')
 
     def handle(self, *args, **options):
         amqp_host = options['amqp_host']
-        self.stdout.write(self.style.SUCCESS(
-            'Starting to listen on "%s"' % amqp_host))
+        queue = options['queue']
         parameters = pika.URLParameters(amqp_host)
         connection = pika.BlockingConnection(parameters)
         channel = connection.channel()
-        channel.basic_consume(self._callback, queue='genotyper', no_ack=True)
+        self.stdout.write(self.style.SUCCESS(
+            'Successfully connected to "%s"' % amqp_host))
+        channel.basic_consume(self._callback, queue=queue, no_ack=True)
+        self.stdout.write(self.style.SUCCESS(
+            'Started to listen on "%s" for HPC job messages' % queue))
         self.stdout.write(self.style.SUCCESS(
             ' [*] Waiting for messages. To exit press CTRL+C'))
         channel.start_consuming()
