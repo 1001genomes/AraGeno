@@ -23,6 +23,6 @@ class AraGenoConfig(AppConfig):
         for acc in accessions:
             acc_id = acc['pk']
             acc['url'] = 'https://arapheno.1001genomes.org/accession/{0}'.format(acc_id)
-            acc['picture_url'] = 'http://gwapp.gmi.oeaw.ac.at/public/plants/{0}.png'.format(acc_id)
+            acc['picture_url'] = '/plants/{0}.png'.format(acc_id)
             cls.accessions_map[acc_id] = acc
 
