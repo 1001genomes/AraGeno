@@ -1,6 +1,6 @@
 #!/bin/bash
 #PBS -l select=1:ncpus=1:mem=%(memory)s
-#PBS -P nordborg_common
+#PBS -P %(project)s
 #PBS -N parse_genotype
 #PBS -A %(id)s
 #PBS -v INPUT_FILE=%(input_file)s,ID=%(id)s,TMPDIR=$WORK/GENOTYPER/$ID
@@ -9,8 +9,7 @@
 
 set -e
 
-module use /net/gmi.oeaw.ac.at/software/shared/nordborg_common/modulefiles/
-module load snpmatch/1.5.1-foss-2016a-Python-2.7.11
+module load SNPmatch/1.6.1-foss-2016a-Python-2.7.11
 
 cd "$WORK/GENOTYPER/$ID"
 

@@ -8,11 +8,13 @@ from models import GenotypeSubmission, IdentifyJob, CrossesJob
 from models import get_identify_result_path
 import tempfile
 import json
+import datetime, math
 from django.conf import settings
 
 #FIXME make it configurable
 BASE_DIR = '/lustre/scratch/users/%s/GENOTYPER/' % settings.HPC_USER
 SUBMIT_SCRIPT_FOLDER = os.path.join(os.path.dirname(__file__),'submit_script_templates/')
+
 
 class FabricException(Exception):
     pass
@@ -27,6 +29,30 @@ env.roledefs = {
     'login': ['login.mendel.gmi.oeaw.ac.at'],
     'dmn': ['dmn0.mendel.gmi.oeaw.ac.at'],
 }
+
+WALLTIME_MULTIPLIER = 2
+MEMORY_MULTIPLIER = 1.5
+DEFAULT_MEMORY = (1024*1024* 4)
+DEFAULT_WALLTIME = 1200
+
+def sizeof_fmt(num, suffix='b'):
+    for unit in ['k','m','g','t','p','e','z']:
+        if abs(num) < 1024.0:
+            return ("%3.0f%s%s" % (num, unit, suffix)).strip()
+        num /= 1024.0
+    return "%.0f%s%s" % (num, 'y', suffix)
+
+def _get_memory(memory):
+    # convert to bytes
+    if not memory:
+        memory = DEFAULT_MEMORY
+    memory = math.ceil(memory * MEMORY_MULTIPLIER)
+    return sizeof_fmt(memory)
+
+def _get_walltime(walltime):
+    if not walltime:
+        walltime = DEFAULT_WALLTIME
+    return str(datetime.timedelta(seconds=math.ceil(walltime * WALLTIME_MULTIPLIER)))
 
 
 
@@ -56,10 +82,11 @@ def submit_parse_job(id, on_hold=True):
     job_script = 'parse_job.sh'
     submit_script = '%s/%s' % (SUBMIT_SCRIPT_FOLDER, job_script)
     ctx = {
-        "walltime": "00:10:00",
-        "memory": "8G",
+        "walltime": _get_walltime(genotype.walltime),
+        "memory": _get_memory(genotype.memory),
         "id": id,
-        "input_file": '%s%s' % (id, ext)
+        "input_file": '%s%s' % (id, ext),
+        "project": settings.HPC_PROJECT
     }
     upload_template(submit_script, target_folder, backup=False, context=ctx)
     with cd(target_folder):
@@ -82,16 +109,17 @@ def submit_identify_jobs(id, job_id = None):
     """
     # Find out if stagejob exists
     genotype = _get_genotype(id)
-    parse_job_id = run('qselect -s H -N parse_genotype -A %s' % id)
+    parse_job_id = run('qselect -s H -P %s -N parse_genotype -A %s' % (settings.HPC_PROJECT, id))
     target_folder = _get_target_folder(id)
     job_script = 'identify_job.sh'
     submit_script = '%s/%s' % (SUBMIT_SCRIPT_FOLDER, job_script)
     ctx = {
-        "walltime": "01:00:00",
-        "memory": "8G",
+        "walltime": '01:00:00',
+        "memory": '4G',
         "id": id,
         "identify_job_id": None,
-        "dataset": None
+        "dataset": None,
+        "project": settings.HPC_PROJECT
     }
     depends = ''
     if parse_job_id != '':
@@ -100,6 +128,8 @@ def submit_identify_jobs(id, job_id = None):
     for job in jobs:
         ctx['identify_job_id'] = job.id
         ctx['dataset'] = job.dataset.name.lower()
+        ctx['walltime'] = _get_walltime(job.walltime)
+        ctx['memory'] = _get_memory(job.memory)
         upload_template(submit_script, target_folder, backup=False, context=ctx)
         with cd(target_folder):
             run('qsub %s %s/%s' % (depends, target_folder, job_script), pty=False)
@@ -119,11 +149,12 @@ def submit_crosses_job(id,job_id):
     job_script = 'crosses_job.sh'
     submit_script = '%s/%s' % (SUBMIT_SCRIPT_FOLDER, job_script)
     ctx = {
-        "walltime": "01:00:00",
-        "memory": "8G",
+        "walltime": _get_walltime(job.walltime),
+        "memory": _get_memory(job.memory),
         "id": id,
         "crosses_job_id": job_id,
-        "dataset": job.identifyjob.dataset.name.lower()
+        "dataset": job.identifyjob.dataset.name.lower(),
+        "project": settings.HPC_PROJECT
     }
     upload_template(submit_script, target_folder, backup=False, context=ctx)
     with cd(target_folder):
@@ -174,3 +205,5 @@ def _get_target_folder(id):
 
 def _get_genotype(id):
     return GenotypeSubmission.objects.get(pk=id)
+
+

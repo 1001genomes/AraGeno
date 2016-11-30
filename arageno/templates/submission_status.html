@@ -471,7 +471,7 @@
         mounted: function () {
             this.$nextTick(function () {
                 this.map = L.map(this.$refs.map_container).setView([0.0, 0.0], 2);
-                L.tileLayer.provider('Stamen.TonerLite').addTo(map);
+                L.tileLayer.provider('Stamen.TonerLite').addTo(this.map);
                 this.initMarkers(this.job);
                 // reqired because might not have been upgraded yet
                 componentHandler.upgradeDom('MaterialTabs','mdl-js-tabs');

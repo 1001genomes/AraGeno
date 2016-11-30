@@ -48,12 +48,19 @@ def delete_upload_folder(instance):
     instance.genotype_file.delete(False)
     shutil.rmtree(folder, ignore_errors=True)
 
-def calculate_finish_date(num_of_markers, start_date, polynominal):
-    """Calculates the finish date"""
+
+def _calculate_polynominal(num_of_markers,polynominal):
+    """Calculates the walltime"""
     if not num_of_markers or not polynominal:
         return None
     poly = np.poly1d(polynominal)
-    duration = abs(poly(num_of_markers))
+    return abs(poly(num_of_markers))
+
+def calculate_finish_date(num_of_markers, start_date, polynominal):
+    """Calculates the finish date"""
+    duration = _calculate_polynominal(num_of_markers,polynominal)
+    if duration is None:
+        return None
     return start_date + timedelta(0,duration)
 
 
@@ -145,6 +152,16 @@ class Job(models.Model):
     @abstractproperty
     def poly_memory(self):
         pass
+
+    @property
+    def walltime(self):
+        """Calculates the walltime for the HPC jobs"""
+        return _calculate_polynominal(self.num_of_markers,self.poly_runtime)
+
+    @property
+    def memory(self):
+        """Return the required memory usage"""
+        return _calculate_polynominal(self.num_of_markers,self.poly_memory)
 
     @property
     def finish_date(self):
@@ -280,7 +297,7 @@ AraGeno Team
         return 'GenotypeSubmission(%s, %s)' % (self.id, os.path.basename(self.genotype_file.name))
 
 
-@receiver(post_delete, sender=GenotypeSubmission)
+@receiver(post_delete, sender=GenotypeSubmission) 
 def genotypesubmission_delete(sender, instance, **kwargs):
     # Pass false so FileField doesn't save the model.
     delete_upload_folder(instance)
@@ -314,11 +331,11 @@ class CrossesJob(Job):
 
     @property
     def poly_runtime(self):
-        return json.loads(self.identifyjob.dataset.runtime_identify)
+        return json.loads(self.identifyjob.dataset.runtime_crosses)
 
     @property
     def poly_memory(self):
-        return json.loads(self.identifyjob.dataset.memory_identify)
+        return json.loads(self.identifyjob.dataset.memory_crosses)
 
     @property
     def num_of_markers(self):

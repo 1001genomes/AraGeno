@@ -176,3 +176,4 @@ LOGGING = {
 ACCESSION_REST_INFO_URL = 'https://arapheno.1001genomes.org/rest/accession/{0}.json'
 ACCESSION_REST_MAP_URL = 'https://arapheno.1001genomes.org/rest/accession/list.json'
 HPC_USER = os.environ['HPC_USER']
+HPC_PROJECT = os.environ.get('HPC_PROJECT','genotyper')

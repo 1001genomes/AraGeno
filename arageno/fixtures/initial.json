@@ -9,10 +9,10 @@
       "num_of_markers": 10707430,
       "pubmed_id": 27293186,
       "doi": "10.1016/j.cell.2016.05.063",
-      "runtime_identify": "[ -4.62027682e-10,   3.70324405e-04,   2.61468406e+01]",
-      "memory_identify": "[ 0,  3.42046845e-02,   1.36741227e+05]",
-      "runtime_crosses":"[  3.92174885e-12,   1.44146330e-04,   2.53958393e+02]", 
-      "memory_crosses":"[  5.36092388e-02,   2.19871476e+05]"
+      "runtime_identify": "[  1.33878468e-04,   5.46010267e+01]",
+      "memory_identify": "[  4.59668825e-02,   1.38082425e+05]",
+      "runtime_crosses":"[  1.81698658e-04,   2.08702501e+02]", 
+      "memory_crosses":"[  5.17413074e-02,   2.17454925e+05]"
     }
   },
   {
@@ -25,38 +25,38 @@
       "num_of_markers": 214554,
       "pubmed_id": 22231484,
       "doi": "10.1038/ng.1042",
-      "runtime_identify": "[ -7.04076474e-12,   1.74622915e-05,   2.83094811e+00]",
-      "memory_identify": "[ -6.04670137e-02,   4.08460573e+04]",
-      "runtime_crosses":"[  3.92174885e-12,   1.44146330e-04,   2.53958393e+02]", 
-      "memory_crosses":"[  5.36092388e-02,   2.19871476e+05]"
+      "runtime_identify": "[  9.38610688e-06,   1.27200682e+01]",
+      "memory_identify": "[  5.13914303e-02,   2.57468730e+04]",
+      "runtime_crosses":"[  2.96530090e-05,   2.27620466e+01]", 
+      "memory_crosses":"[  4.72743858e-02,   6.39973631e+04]"
     }
   },
   {
     "model":"arageno.Setting",
     "pk":"runtime_parsing_vcf",
     "fields": {
-      "value": "[ 0, 5.42952505e-05,   1.50328367e+00]"
+      "value": "[  5.59421209e-05,   7.65716416e+00]"
     }
   },
   {
     "model":"arageno.Setting",
     "pk":"memory_parsing_vcf",
     "fields": {
-      "value": "[  2.48469096e-01,   2.76959922e+03]"
+      "value": "[  2.52977914e-01,   4.80745229e+03]"
     }
   },
   {
     "model":"arageno.Setting",
     "pk":"runtime_parsing_bed",
     "fields": {
-      "value": "[ 0, 1.98959011e-06,   1.33671763e+00]"
+      "value": "[  2.28061339e-06,   1.02451170e+01]"
     }
   },
   {
     "model":"arageno.Setting",
     "pk":"memory_parsing_bed",
     "fields": {
-      "value": "[  2.48469096e-01,   2.76959922e+03]"
+      "value": "[ 472.]"
     }
   }
 ]
