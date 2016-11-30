@@ -36,7 +36,7 @@
 
                             <vue-chart
                                 chart-type="ColumnChart"
-                                :columns='[{"type":"string","label":"Accession"},{"type":"number","label":"# Windows"},{"type":"string","role":"annotation"},{"type":"string","role":"style"}]'
+                                :columns="crossesChartColumns"
                                 :rows="crossesChartRows"
                                 :options="crossesChartOptions"
                             ></vue-chart>
@@ -131,7 +131,7 @@
                     <span ref="overlapLabel" class="overlap-label">{{ "{{ overlap }" }}}</span>
                     <vue-chart
                         chart-type="PieChart"
-                        :columns='[{"type":"string","label":"Overlap"},{"type":"number","label":"%"}]'
+                        :columns="overlapChartColumn"
                         :rows="overlapChartRows"
                         :options="overlapChartOptions"
                         ref="pieChart"                        
@@ -147,13 +147,13 @@
                         <div class="mdl-tabs__panel is-active" id="stats-panel">
                             <vue-chart class="histogram-chart" v-if="showHistogram"
                                 chart-type="Histogram"
-                                :columns='[{"type":"string","label":"Accession"},{"type":"number","label":"Probablity"}]'
+                                :columns="identifyHistogramColumns"
                                 :rows="identifyHistogramRows"
                                 :options="identifyHistogramOptions" key="histogram-chart"
                             ></vue-chart>
                            <vue-chart class="column-chart" v-else
                                 chart-type="ColumnChart"
-                                :columns='[{"type":"string","label":"Accession"},{"type":"number","label":"Probablity"},{"type":"number","label":"Overlap"}]'
+                                :columns="identifyColumnChartColumns"
                                 :rows="identifyColumnChartRows"
                                 :options="identifyColumnChartOptions" key="column-chart"
                             ></vue-chart>
@@ -636,6 +636,9 @@
 
                 return rows;
             },
+            crossesChartColumns: function() {
+                return [{"type":"string","label":"Accession"},{"type":"number","label":"# Windows"},{"type":"string","role":"annotation"},{"type":"string","role":"style"}];
+            },
             crossesChartRows: function() {
                 var identifyData = defaultIdentifyChartRows;
                 var ix = 2;
@@ -760,6 +763,9 @@
             }
         },
         computed: {
+            overlapChartColumn: function() {
+                return [{"type":"string","label":"Overlap"},{"type":"number","label":"%"}];
+            },
             interpretation: function() {
                 if (this.finished) {
                     return this.job.statistics.interpretation;
@@ -894,6 +900,9 @@
                 var rows = identifyData.slice(0,10).map(this.convertForColumn);
                 return rows;
             },
+            identifyHistogramColumns: function() {
+                return [{"type":"string","label":"Accession"},{"type":"number","label":"Probablity"}];
+            },
             identifyHistogramOptions: function() {
                 var title = 'Histogram';
                 if (this.finished) {
@@ -909,6 +918,9 @@
                         easing: 'out',
                     },
                 }
+            },
+            identifyColumnChartColumns: function() {
+                return [{"type":"string","label":"Accession"},{"type":"number","label":"Probablity"},{"type":"number","label":"Overlap"}];
             },
             identifyColumnChartOptions: function() {
                 var barColor = this.finished ? '#2196F3' : '#EEEEEE' ;
