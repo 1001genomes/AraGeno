@@ -33,6 +33,7 @@ env.roledefs = {
 WALLTIME_MULTIPLIER = 2
 MEMORY_MULTIPLIER = 1.5
 DEFAULT_MEMORY = (1024*1024* 4)
+MIN_MEMORY=1024*50
 DEFAULT_WALLTIME = 1200
 
 def sizeof_fmt(num, suffix='b'):
@@ -46,7 +47,7 @@ def _get_memory(memory):
     # convert to bytes
     if not memory:
         memory = DEFAULT_MEMORY
-    memory = math.ceil(memory * MEMORY_MULTIPLIER)
+    memory = math.ceil(max(memory,MIN_MEMORY) * MEMORY_MULTIPLIER)
     return sizeof_fmt(memory)
 
 def _get_walltime(walltime):
