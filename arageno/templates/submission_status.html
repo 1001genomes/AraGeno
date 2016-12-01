@@ -380,6 +380,7 @@
 
         mounted: function () {
             this.$nextTick(function () {
+                componentHandler.upgradeDom();
                 setProgress('#status_progress_'+ this.id,this.progress);
             })
         },
@@ -470,11 +471,10 @@
         },
         mounted: function () {
             this.$nextTick(function () {
+                componentHandler.upgradeDom();
                 this.map = L.map(this.$refs.map_container).setView([0.0, 0.0], 2);
                 L.tileLayer.provider('Stamen.TonerLite').addTo(this.map);
                 this.initMarkers(this.job);
-                // reqired because might not have been upgraded yet
-                componentHandler.upgradeDom('MaterialTabs','mdl-js-tabs');
             })
 
         },
@@ -708,6 +708,7 @@
         },
         mounted: function () {
             this.$nextTick(function () {
+                componentHandler.upgradeDom();
                 this.map = L.map(this.$refs.map_container).setView([0.0, 0.0], 2);
                 L.tileLayer.provider('Stamen.TonerLite').addTo(this.map);
                 this.initMarkers(this.job);
@@ -970,6 +971,11 @@
                 setProgress('#genotype_progress',newProgress);
             }
          },
+         mounted: function () {
+            this.$nextTick(function () {
+                componentHandler.upgradeDom();
+            })
+        },
          computed: {
             interpretationIcon:  function() {
                 if (this.hasIssues) {
