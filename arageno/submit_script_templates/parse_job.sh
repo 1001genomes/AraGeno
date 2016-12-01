@@ -4,7 +4,7 @@
 #PBS -N parse_genotype
 #PBS -A %(id)s
 #PBS -v INPUT_FILE=%(input_file)s,ID=%(id)s,TMPDIR=$WORK/GENOTYPER/$ID
-#PBS -q new_nodes
+#PBS -q workq
 #PBS -l walltime=%(walltime)s
 
 set -e

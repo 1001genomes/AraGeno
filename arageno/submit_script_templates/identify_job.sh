@@ -4,7 +4,7 @@
 #PBS -N identify_genotype
 #PBS -A %(identify_job_id)s
 #PBS -v ID=%(id)s,JOB_ID=%(identify_job_id)s,DATASET=%(dataset)s,TMPDIR=$WORK/GENOTYPER/$ID
-#PBS -q new_nodes
+#PBS -q workq
 #PBS -l walltime=%(walltime)s
 
 set -e

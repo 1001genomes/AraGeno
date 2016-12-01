@@ -4,7 +4,7 @@
 #PBS -N crosses_check
 #PBS -A %(crosses_job_id)s
 #PBS -v ID=%(id)s,JOB_ID=%(crosses_job_id)s,DATASET=%(dataset)s,TMPDIR=$WORK/GENOTYPER/$ID
-#PBS -q new_nodes
+#PBS -q workq
 #PBS -l walltime=%(walltime)s
 
 set -e
