@@ -29,7 +29,7 @@
                         <div class="mdl-tabs__tab-bar">
                             <a href="#stats-panel" class="mdl-tabs__tab is-active">Stats</a>
                             <a href="#table-panel" class="mdl-tabs__tab">Table</a>
-                            <a href="#map-panel" class="mdl-tabs__tab">Map</a>
+                            <a href="#map-panel" class="mdl-tabs__tab" ref="maptab">Map</a>
                             <a v-show="hasWindows" href="#plot-panel" class="mdl-tabs__tab">Windows</a>
                         </div>
                         <div class="mdl-tabs__panel is-active" id="stats-panel">
@@ -134,7 +134,7 @@
                         :columns="overlapChartColumn"
                         :rows="overlapChartRows"
                         :options="overlapChartOptions"
-                        ref="pieChart"                        
+                        ref="pieChart"
                     ></vue-chart>
                 </div>
                 <div class="mdl-cell mdl-cell--8-col">
@@ -142,7 +142,7 @@
                         <div class="mdl-tabs__tab-bar">
                             <a href="#stats-panel" class="mdl-tabs__tab is-active">Stats</a>
                             <a href="#table-panel" class="mdl-tabs__tab">Table</a>
-                            <a href="#map-panel" class="mdl-tabs__tab">Map</a>
+                            <a href="#map-panel" class="mdl-tabs__tab" ref="maptab">Map</a>
                         </div>
                         <div class="mdl-tabs__panel is-active" id="stats-panel">
                             <vue-chart class="histogram-chart" v-if="showHistogram"
@@ -475,6 +475,9 @@
                 this.map = L.map(this.$refs.map_container).setView([0.0, 0.0], 2);
                 L.tileLayer.provider('Stamen.TonerLite').addTo(this.map);
                 this.initMarkers(this.job);
+                 this.$refs.maptab.addEventListener("click", function() {
+                    this.map.invalidateSize(false);
+                }.bind(this));
             })
 
         },
@@ -712,8 +715,10 @@
                 this.map = L.map(this.$refs.map_container).setView([0.0, 0.0], 2);
                 L.tileLayer.provider('Stamen.TonerLite').addTo(this.map);
                 this.initMarkers(this.job);
+                this.$refs.maptab.addEventListener("click", function() {
+                    this.map.invalidateSize(false);
+                }.bind(this));
             })
-
         },
         watch: {
             job: {
@@ -1082,7 +1087,7 @@
                         var identifyJob = app.identifyjobSet[i];
                         var newIdentifyJob = result.identifyjobSet[i];
                         identifyJob.progress = newIdentifyJob.progress;
-                        identifyJob.remaining = newIdentifyJob.remaining; 
+                        identifyJob.remaining = newIdentifyJob.remaining;
                         if (identifyJob.status !== newIdentifyJob.status) {
                             isChanged = true;
                             app.$set(app.identifyjobSet,i,newIdentifyJob);
