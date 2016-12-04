@@ -85,6 +85,9 @@ def get_identify_result_path(id, job_id):
     return '%s/%s.txt' % (get_upload_folder(id), job_id)
 
 
+def identify_result_file(instance,filename):
+    return '{0}/{1}'.format(get_upload_folder(instance.genotype.id),filename)
+
 def genotype_file_directory(instance, filename):
     uid = uuid.uuid4()
     instance.id = uid
@@ -282,9 +285,9 @@ class GenotypeSubmission(Job):
     def get_email_text(self):
         """returns the email body that will be sent upon submission"""
         return '''Dear %(firstname)s %(lastname)s,
-you submitted your genotype for identification. 
+you submitted your genotype for identification.
 You can check the status of the submission using folowing URL:
-http://arageno.gmi.oeaw.ac.at%(submission_url)s/  
+http://arageno.gmi.oeaw.ac.at%(submission_url)s/
 Thank you for your patience
 Best
 AraGeno Team
@@ -297,7 +300,7 @@ AraGeno Team
         return 'GenotypeSubmission(%s, %s)' % (self.id, os.path.basename(self.genotype_file.name))
 
 
-@receiver(post_delete, sender=GenotypeSubmission) 
+@receiver(post_delete, sender=GenotypeSubmission)
 def genotypesubmission_delete(sender, instance, **kwargs):
     # Pass false so FileField doesn't save the model.
     delete_upload_folder(instance)
@@ -322,7 +325,7 @@ class CrossesJob(Job):
     identifyjob = models.OneToOneField('IdentifyJob', on_delete=models.CASCADE, primary_key=True)
     objects = CrossesJobQuerySet.as_manager()
 
-    @property  
+    @property
     def matches(self):
         """Retrieve match statistics"""
         if self.status == 3:
@@ -376,7 +379,7 @@ class IdentifyJob(Job):
     genotype = models.ForeignKey(
         GenotypeSubmission, on_delete=models.CASCADE)
     dataset = models.ForeignKey('Dataset', on_delete=models.CASCADE)
-    identify_file = models.FileField()
+    identify_file = models.FileField(upload_to=identify_result_file)
 
     objects = IdentifyJobQuerySet.as_manager()
 

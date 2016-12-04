@@ -35,6 +35,7 @@ MEMORY_MULTIPLIER = 1.5
 DEFAULT_MEMORY = (1024*1024* 4)
 MIN_MEMORY=1024*50
 DEFAULT_WALLTIME = 1200
+MIN_WALLTIME=60*10
 
 def sizeof_fmt(num, suffix='b'):
     for unit in ['k','m','g','t','p','e','z']:
@@ -47,13 +48,13 @@ def _get_memory(memory):
     # convert to bytes
     if not memory:
         memory = DEFAULT_MEMORY
-    memory = math.ceil(max(memory,MIN_MEMORY) * MEMORY_MULTIPLIER)
+    memory = math.ceil(max(memory * MEMORY_MULTIPLIER,MIN_MEMORY) )
     return sizeof_fmt(memory)
 
 def _get_walltime(walltime):
     if not walltime:
         walltime = DEFAULT_WALLTIME
-    return str(datetime.timedelta(seconds=math.ceil(walltime * WALLTIME_MULTIPLIER)))
+    return str(datetime.timedelta(seconds=math.ceil(max(walltime * WALLTIME_MULTIPLIER,MIN_WALLTIME) )))
 
 
 
@@ -174,10 +175,11 @@ def get_identify_job_result(id, identify_job_id):
     Function to stage-out result files and cleanup
     """
     target_folder = _get_target_folder(id)
-    output_path = get_identify_result_path(id, identify_job_id)
+    output_path = '%s/%s.tsv' % (tempfile.gettempdir(),identify_job_id)
     with cd(target_folder):
         get('%s.txt' % identify_job_id,output_path)
-    return json.loads(_read_file(id, '%s.txt.matches.json' % identify_job_id))
+    data = json.loads(_read_file(id, '%s.txt.matches.json' % identify_job_id))
+    return data, output_path
 
 
 @roles('dmn')

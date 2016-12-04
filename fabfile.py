@@ -3,9 +3,11 @@ from fabric.contrib.console import confirm
 from fabric.contrib import django
 django.settings_module('AraGenoSite.settings')
 import django
+from django.core.files import File
 django.setup()
 from arageno.hpc import *
 from arageno.models import *
+import os
 
 @task
 def stagein(id):
@@ -37,21 +39,16 @@ def genotypeStats(id):
 
 @task
 def identifyResult(id, job_id,save_to_db=False):
-    data = execute(get_identify_job_result, id, job_id)
+
+    result = execute(get_identify_job_result, id, job_id)
+    data, output_file = result[result.keys()[0]]
     if save_to_db:
         job = IdentifyJob.objects.get(pk=int(job_id))
-        # TODO move to services.py
-        data = data[data.keys()[0]]
-
-        from operator import itemgetter
-        matches = data['matches']
-        data['matches'] = [[key, matches[key][0], matches[key][1], matches[key][2]]
-                            for key in matches.keys()]
-        data['matches'] = sorted(
-            data['matches'], key=itemgetter(1), reverse=True)
+        result_file = File(open(output_file,'rb'))
+        job.identify_file.save("%s.tsv" % job_id, result_file)
+        os.unlink(output_file)
         job.statistics = json.dumps(data)
 
         job.status = STATUS_CHOICES[4][0]
         job.progress = 100
         job.save()
-    print data

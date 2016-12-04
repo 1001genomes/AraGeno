@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.files import File
 from arageno.models import GenotypeSubmission, IdentifyJob, CrossesJob
 from django.utils import timezone
 from arageno.models import STATUS_CHOICES, get_identify_result_path, FINISHED, PROCESSING
@@ -10,6 +11,7 @@ import pika
 import json
 from collections import OrderedDict
 import re
+import os
 from AraGenoSite.urls import UUID_REGEX
 
 
@@ -22,7 +24,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             'amqp_host')
-        parser.add_argument('--queue', dest='queue', 
+        parser.add_argument('--queue', dest='queue',
         default='arageno', help='Name of the queue to listen for HPC job messages')
 
     def handle(self, *args, **options):
@@ -65,7 +67,6 @@ class Command(BaseCommand):
             elif state == 'E':
                 data = self._get_data(obj)
                 if job_name == 'identify_genotype':
-                    obj.identify_file.name = get_identify_result_path(obj.genotype.id, obj.id)
                     # CHECK if crosses job is necessary
                     if data['interpretation']['case'] == 3:
                         try:
@@ -111,8 +112,11 @@ class Command(BaseCommand):
     def _get_data(self, obj):
         data = None
         if isinstance(obj, IdentifyJob):
-            data = execute(get_identify_job_result, obj.genotype.id, obj.id)
-            data = data[data.keys()[0]]
+            result = execute(get_identify_job_result, obj.genotype.id, obj.id)
+            data,output_path = result[result.keys()[0]]
+            django_file = File(open(output_path,'rb'))
+            obj.identify_file.save('%s.tsv' % obj.id,django_file)
+            os.unlink(output_path)
         elif isinstance(obj, GenotypeSubmission):
             data = execute(get_parse_job_result, obj.id)
             data = data[data.keys()[0]]
@@ -133,4 +137,4 @@ class Command(BaseCommand):
         elif state == 'E':
             return STATUS_CHOICES[4]
         else:
-            return None    
+            return None
