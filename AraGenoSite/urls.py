@@ -18,7 +18,7 @@ from django.contrib import admin
 from rest_framework import routers, serializers, viewsets
 from rest_framework.urlpatterns import format_suffix_patterns
 import arageno.views as views
-from arageno.rest import GenotypeSubmissionViewSet, plot_crosses_windows
+from arageno.rest import GenotypeSubmissionViewSet, plot_crosses_windows, download
 
 admin.autodiscover()
 
@@ -41,6 +41,7 @@ urlpatterns = [
 
 restpatterns = [
     url(r'^api/identify/(?P<pk>%s)/jobs/(?P<job_id>(\d+))/plot/$' % UUID_REGEX, plot_crosses_windows, name="crosses_plot"),
+    url(r'^api/identify/(?P<pk>%s)/jobs/(?P<job_id>(\d+))/download/$' % UUID_REGEX, download, name="download"),
 ]
 
 

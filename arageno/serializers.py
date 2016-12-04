@@ -6,8 +6,23 @@ from django.urls import reverse
 from rest_framework import serializers
 from models import GenotypeSubmission, IdentifyJob, Dataset
 import json
-from services import retrieve_accession_infos
+import logging
+from apps import AraGenoConfig
 
+logger = logging.getLogger(__name__)
+
+
+def retrieve_accession_infos(accession_ids):
+    """Retrieves accession infos from REST endpoint"""
+    accession_infos = {}
+    if accession_ids:
+        #TODO make it more efficient
+        for acc_id in accession_ids:
+            try:
+                accession_infos[acc_id] = AraGenoConfig.accessions_map[int(acc_id)]
+            except Exception as err:
+                logger.warn('Could not retrieve infos for acc %s. Error: %s ', acc_id, repr(err))
+    return accession_infos
 
 class JSONSerializerField(serializers.Field):
     """ Serializer for JSONField -- required to make field writable"""
@@ -46,11 +61,15 @@ class IdentifyJobSerializer(serializers.HyperlinkedModelSerializer):
     statistics = JSONSerializerField()
     status_text = serializers.CharField(source='get_status_display')
     crossesjob = CrossesJobSerializer()
+    download_url = serializers.SerializerMethodField()
 
     class Meta:
         model = IdentifyJob
         fields = ('id', 'status', 'status_text','updated','created', 'progress',
-                  'remaining','statistics', 'dataset', 'crossesjob')
+                  'remaining','statistics', 'dataset', 'crossesjob','download_url')
+
+    def get_download_url(self, obj):
+        return reverse('download', args=[obj.genotype.id, obj.pk])
 
 
 class GenotypeSubmissionSerializer(serializers.HyperlinkedModelSerializer):

@@ -10,8 +10,15 @@ from django.conf import settings
 from apps import AraGenoConfig
 import requests
 import logging
+import plotting
 import re
 import subprocess
+import shutil
+import tempfile
+from serializers import IdentifyJobSerializer
+from rest_framework.renderers import JSONRenderer
+import zipfile
+
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -47,19 +54,6 @@ def start_identify_pipeline(genotype):
 
 
 
-def retrieve_accession_infos(accession_ids):
-    """Retrieves accession infos from REST endpoint"""
-    accession_infos = {}
-    if accession_ids:
-        #TODO make it more efficient
-        for acc_id in accession_ids:
-            try:
-                accession_infos[acc_id] = AraGenoConfig.accessions_map[int(acc_id)]
-            except Exception as err:
-                logger.warn('Could not retrieve infos for acc %s. Error: %s ', acc_id, repr(err))
-    return accession_infos
-
-
 def count_lines(filename):
     """Return number of lines in file"""
     lines = None
@@ -70,3 +64,24 @@ def count_lines(filename):
     except subprocess.CalledProcessError, err:
         logger.error(err)
     return lines
+
+def create_download_zip(fp,job):
+
+    with zipfile.ZipFile(fp, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+        dir_name = tempfile.mkdtemp()
+        json = JSONRenderer().render(IdentifyJobSerializer(job).data)
+        stats_file = '%s/stats.json' % dir_name
+        with open(stats_file,'w') as fp:
+            fp.write(json)
+        zip_file.write(stats_file,'stats.json')
+        # put files there
+        shutil.copyfile(job.identify_file.path,'%s/result.tsv' % dir_name)
+        zip_file.write('%s/result.tsv' % dir_name,'result.tsv')
+        if(hasattr(job, 'crossesjob')):
+            plt = plotting.plot_crosses_data(job.crossesjob)
+            plt.savefig('%s/crosses_plot.pdf' % dir_name)
+            zip_file.write('%s/crosses_plot.pdf' % dir_name,'crosses_plot.pdf')
+        shutil.rmtree(dir_name,ignore_errors=True)
+
+
+

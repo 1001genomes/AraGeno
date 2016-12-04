@@ -199,7 +199,7 @@
             </div>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a v-if="finished" href="" style="float:right" class="mdl-button mdl-js-button  mdl-button--accent mdl-button--raised">
+            <a v-if="finished" :href="downloadUrl" style="float:right" class="mdl-button mdl-js-button  mdl-button--accent mdl-button--raised">
                 <i class="material-icons">file_download</i> Download
             </a>
             <button v-else disabled style="float:right" class="mdl-button mdl-js-button  mdl-button--accent mdl-button--raised"><i class="material-icons">file_download</i> Download</button>
@@ -769,6 +769,12 @@
             }
         },
         computed: {
+            downloadUrl:function() {
+                if (this.finished) {
+                    return this.job.downloadUrl;
+                }
+                return "";
+            },
             overlapChartColumn: function() {
                 return [{"type":"string","label":"Overlap"},{"type":"number","label":"%"}];
             },

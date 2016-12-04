@@ -12,6 +12,10 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from django.http import HttpResponseBadRequest, HttpResponse, Http404
 from models import GenotypeSubmission, IdentifyJob
 from plotting import plot_crosses_data
+from services import create_download_zip
+from wsgiref.util import FileWrapper
+import tempfile
+import zipfile
 
 
 class GenotypeSubmissionViewSet(viewsets.ReadOnlyModelViewSet):
@@ -64,7 +68,7 @@ def plot_crosses_windows(request,pk,job_id,format=None):
           required: True
           type: number
           paramType: path
-    
+
     omit_serializer: true
     produces:
         - image/png
@@ -86,4 +90,36 @@ def plot_crosses_windows(request,pk,job_id,format=None):
         plot = plot_crosses_data(job.crossesjob)
         response = HttpResponse(content_type=content_type)
         plot.savefig(response)
+        return response
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticatedOrReadOnly,))
+def download(request, pk, job_id):
+    """
+    Download identify result
+    ---
+    parameters:
+        - name: pk
+          description: id of the submission
+          required: true
+          type: number
+          paramType: path
+        - name: job_id
+          description: id of the job_id
+          required: True
+          type: number
+          paramType: path
+
+    omit_serializer: true
+    produces:
+        - application/zip
+    """
+
+    if request.method == "GET":
+        job = IdentifyJob.objects.get(pk=job_id)
+        fp = tempfile.NamedTemporaryFile(suffix='zip')
+        create_download_zip(fp,job)
+        fp.seek(0)
+        response = HttpResponse(FileWrapper(fp), content_type='application/zip')
+        response['Content-Disposition'] = 'attachment; filename="%s_%s.zip"' % (job.genotype.id, job.dataset.name)
         return response
