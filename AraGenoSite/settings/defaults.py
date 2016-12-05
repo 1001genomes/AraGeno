@@ -24,7 +24,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY','REPLACE_WITH_PROD_KEY')
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS','localhost').split()
 
-ADMINS = [('Uemit', 'uemit.seren@gmi.oeaw.ac.at')]
+ADMINS = []
+
+DEFAULT_FROM_EMAIL='AraGeno <ara.geno@gmi.oeaw.ac.at>'
 
 # Application definition
 

@@ -12,7 +12,7 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
+ADMINS = [ tuple(admin.split(',')) for admin in os.environ['ADMINS'].split()]
 EMAIL_HOST = os.environ["EMAIL_HOST"]
 EMAIL_PORT = os.environ.get("EMAIL_PORT", 25)
 EMAIL_HOST_USER = os.environ["EMAIL_USER"]

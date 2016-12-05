@@ -41,14 +41,11 @@ def create_identifyjobs(genotype, datasets=None):
 def start_identify_pipeline(genotype):
     """Start the identify pipeline"""
     identify_pipeline(genotype.id)
-    admin_name, admin_email = settings.ADMINS[0]
     email = EmailMessage(
-        'Genotype submitted to AraGeno',
+        'Identification job stated on AraGeno',
         genotype.get_email_text(),
-        '%s <%s>' % (admin_name, admin_email),
-        [genotype.email],
-        [admin_email],
-        reply_to=[admin_email]
+        bcc=[settings.DEFAULT_FROM_EMAIL],
+        to=[genotype.email],
     )
     email.send(True)
 

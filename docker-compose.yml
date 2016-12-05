@@ -1,10 +1,10 @@
 version: '2'
 services:
   web:
-    restart: unless-stopped 
-    build: 
+    restart: unless-stopped
+    build:
       context: .
-      args: 
+      args:
         - HPC_USER
     working_dir: /code
     entrypoint: /code/docker-entrypoint.sh
@@ -21,10 +21,11 @@ services:
       - EMAIL_USER=${EMAIL_USER}
       - DJANGO_SETTINGS_MODULE=AraGenoSite.settings.prod
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
-      - SECRET_KEY=${SECRET_KEY} 
+      - SECRET_KEY=${SECRET_KEY}
+      - ADMINS=${ADMINS}
   hpc:
     restart: unless-stopped
-    build: 
+    build:
       context: .
       args:
         - HPC_USER
@@ -39,5 +40,7 @@ services:
       - EMAIL_HOST=${EMAIL_HOST}
       - EMAIL_USER=${EMAIL_USER}
       - DJANGO_SETTINGS_MODULE=AraGenoSite.settings.prod
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
       - SECRET_KEY=${SECRET_KEY}
-  
+      - ADMINS=${ADMINS}
+
