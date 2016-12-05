@@ -44,6 +44,7 @@ def upload_genotype(request):
     Upload genotype for identify service
     '''
     if request.method == 'POST':
+        submission = None
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             try:
