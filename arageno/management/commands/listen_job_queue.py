@@ -89,7 +89,7 @@ class Command(BaseCommand):
             if job_name == 'identify_genotype':
                 if obj.genotype.identify_finished:
                     self.stdout.write(self.style.SUCCESS('Cleaning up files for %s' % obj.genotype))
-                    #execute(cleanup_files, obj.genotype.id)
+                    execute(cleanup_files, obj.genotype.id)
             # send email
         except Exception as err:
             # SEND email when there is error
