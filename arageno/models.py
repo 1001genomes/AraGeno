@@ -287,7 +287,7 @@ class GenotypeSubmission(Job):
         return '''Dear %(firstname)s %(lastname)s,
 you submitted your genotype for identification.
 You can check the status of the submission using folowing URL:
-http://arageno.gmi.oeaw.ac.at%(submission_url)s/
+http://arageno.gmi.oeaw.ac.at%(submission_url)s
 Thank you for your patience
 Best
 AraGeno Team
