@@ -33,11 +33,11 @@
                            <h5>What is AraGeno?</h5>
                         </div>
                         <div class="question__answer">
-                            The AraGeno service allows researchers to identify their Arabidopsis thaliana plants. 
-                            There are two distinct services that are provided: 
-                            <ul><li><b>Identifying a plant</b>: Users can upload the genotype data of a A.thaliana plant and we will identify the corresponding line</li> 
+                            The AraGeno service allows researchers to identify their Arabidopsis thaliana plants.
+                            There are two distinct services that are provided:
+                            <ul><li><b>Identifying a plant</b>: Users can upload the genotype data of a A.thaliana plant and we will identify the corresponding line</li>
                             <li><b>Genotyping a sample</b>: Users can send a samples of a plant and we will genotype them and additionally identify the line</li>
-                            </ul>  
+                            </ul>
                         </div>
                     </div>
                     <div class="faq-content__question question">
@@ -45,7 +45,7 @@
                            <h5>How much does it cost?</h5>
                         </div>
                         <div class="question__answer">
-                             Under construction 
+                             Under construction
                         </div>
                     </div>
                 </section>
@@ -58,7 +58,7 @@
                         </div>
                         <div class="question__answer">
                             <a href="https://github.com/Gregor-Mendel-Institute/SNPMatch" target="_blank">SNPmatch</a> can genotype samples efficiently and economically using a simple likelihood approach.
-                            This approach allows SNPmatch to genotype samples with as low as 5000 informative SNPs.  
+                            This approach allows SNPmatch to genotype samples with as low as 5000 informative SNPs.
                         </div>
                     </div>
                     <div class="faq-content__question question">
@@ -66,7 +66,7 @@
                            <h5>How long does it take?</h5>
                         </div>
                         <div class="question__answer">
-                            SNPmatch is a python script taking about 18 seconds for the entire analysis, to compare 500000 SNPs to the 10.7 million markers in the reference database (1001 SNP matrix)  
+                            SNPmatch is a python script taking about 18 seconds for the entire analysis, to compare 500000 SNPs to the 10.7 million markers in the reference database (1001 SNP matrix)
                         </div>
                     </div>
                     <div class="faq-content__question question">
@@ -74,8 +74,8 @@
                            <h5>Which input files are supported?</h5>
                         </div>
                         <div class="question__answer">
-                            Presently, AraGenotyper takes input files with two different formats, BED and VCF. 
-                            The bed file is a three column file with chr, position and genotype tab-separated. 
+                            Presently, AraGenotyper takes input files with two different formats, BED and VCF.
+                            The bed file is a three column file with chr, position and genotype tab-separated.
                             An example is given below
                             <pre>
 1 125 0/0
@@ -92,13 +92,43 @@
 1 612 1/1
 1 617 0/1
                             </pre>
-                            The SNPs can be even phased (0|0). 
+                            The SNPs can be even phased (0|0).
                             Chromosome names such as Chr1, Chr2 instead of 1, 2 are also parsed.<br><br>
 
-                            The VCF file has a default format detailed in <a href="http://gatkforums.broadinstitute.org/gatk/discussion/1268/what-is-a-vcf-and-how-should-i-interpret-it" target="_blank">here</a>. 
+                            The VCF file has a default format detailed in <a href="http://gatkforums.broadinstitute.org/gatk/discussion/1268/what-is-a-vcf-and-how-should-i-interpret-it" target="_blank">here</a>.
                             The main arguments SNPmatch requires is CHROM and POS in header and GT in the INFO column.
 
-                            Sample files for both BED and VCF format can be downloaded in the official <a href="https://github.com/Gregor-Mendel-Institute/SNPmatch/tree/master/sample_files" target="_blank">SNPMatch github repository</a>   
+                            Sample files for both BED and VCF format can be downloaded in the official <a href="https://github.com/Gregor-Mendel-Institute/SNPmatch/tree/master/sample_files" target="_blank">SNPMatch github repository</a>
+                        </div>
+                    </div>
+                    <div class="faq-content__question question">
+                        <div class="question__question">
+                           <h5>Can I programatically identify my samples?</h5>
+                        </div>
+                        <div class="question__answer">
+                            Yes, AraGeno provides a <a href="https://en.wikipedia.org/wiki/Representational_state_transfer" target="_blank">REST</a> api for identifying your samples.<br>
+                            This allows you to use AraGeno from the your programs and scripts and also enables you to easily run multiple identifications at the same time.
+                            <br>
+                            <h6>Start identification</h6>
+                            To start a identify job, you need to send a <b>POST</b> request to the /api/identify endpoint.
+                            You need to provide <b>firstname</b>, <b>lastname</b> and <b>email</b> as form paramters and the file as a <b>genotype</b> paramter<br>
+                            Here is a sample <a href="https://en.wikipedia.org/wiki/CURL" target="_blank">cURL</a> call:
+<pre>curl --request POST \
+  --url https://arageno.gmi.oeaw.ac.at/api/identify/ \
+  --form firstname=Jon \
+  --form lastname=Doe \
+  --form email=jon.doe@gmail.com \
+  --form 'genotype=@genotype_file.vcf'</pre>
+                            <h6>Check analysis & retrieve results</h6>
+                            The above call will return you a JSON object which contains information about the submitted genotype.<br>
+                            The JSON object contains also <b>url</b> key that can be used to check the status and result of the running analysis.<br>
+                            This can be done by sending a <b>GET</b> request to that url (i.e. <code>https://arageno.gmi.oeaw.ac.at/api/identify/c5d35fd3-a315-4a52-935c-52e9cda38c12</code>)
+<pre>curl --request GET \
+    --url https://arageno.gmi.oeaw.ac.at/api/identify/926ad585-cea1-44b8-8d48-0c547699f78f/ \</pre>
+                            <h6>Delete submission</h6>
+                            To delete a submission just send a <b>DELETE</b> request to the info endpoint (value of <b>url</b> key in above JSON object).
+<pre>curl --request DELETE \
+  --url http://localhost:8000/api/identify/59580110-3c09-46b0-ac38-ca617737a78f/ \</pre>
                         </div>
                     </div>
                 </section>
@@ -110,7 +140,7 @@
                            <h5>How does it work?</h5>
                         </div>
                         <div class="question__answer">
-                            Under construction  
+                            Under construction
                         </div>
                     </div>
                     <div class="faq-content__question question">
@@ -118,7 +148,7 @@
                            <h5>How much does it cost?</h5>
                         </div>
                         <div class="question__answer">
-                            Under construction  
+                            Under construction
                         </div>
                     </div>
                     <div class="faq-content__question question">
@@ -126,7 +156,7 @@
                            <h5>How long does it take?</h5>
                         </div>
                         <div class="question__answer">
-                            Under construction  
+                            Under construction
                         </div>
                     </div>
                 </section>

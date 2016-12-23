@@ -73,15 +73,19 @@ class IdentifyJobSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class GenotypeSubmissionSerializer(serializers.HyperlinkedModelSerializer):
-    identifyjob_set = IdentifyJobSerializer(many=True)
-    statistics = JSONSerializerField()
-    status_text = serializers.CharField(source='get_status_display')
-    accessions = serializers.SerializerMethodField()
+    identifyjob_set = IdentifyJobSerializer(many=True, read_only=True)
+    statistics = JSONSerializerField(read_only=True)
+    status_text = serializers.CharField(source='get_status_display',read_only=True)
+    accessions = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = GenotypeSubmission
-        fields = ('url', 'id', 'created', 'updated', 'fullname', 'statistics', 'email',
+        fields = ('url', 'id', 'created', 'updated', 'fullname','firstname', 'lastname', 'statistics', 'email',
                   'progress','remaining', 'status', 'status_text',  'identifyjob_set', 'identify_finished', 'accessions')
+        extra_kwargs = {'firstname': {'write_only': True},
+                        'lsatname': {'write_only': True},
+                        'id': {'read_only': True}
+                        }
 
     def get_accessions(self, obj):
         return retrieve_accession_infos(obj.accession_ids)
