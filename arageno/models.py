@@ -89,8 +89,10 @@ def identify_result_file(instance,filename):
     return '{0}/{1}'.format(get_upload_folder(instance.genotype.id),filename)
 
 def genotype_file_directory(instance, filename):
-    uid = uuid.uuid4()
-    instance.id = uid
+    uid = instance.id
+    if not uid:
+        uid = uuid.uuid4()
+        instance.id = uid
     return '{0}/{1}'.format(get_upload_folder(uid), filename)
 
 
