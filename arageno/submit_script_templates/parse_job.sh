@@ -4,12 +4,11 @@
 #PBS -N parse_genotype
 #PBS -A %(id)s
 #PBS -v INPUT_FILE=%(input_file)s,ID=%(id)s,TMPDIR=$WORK/GENOTYPER/$ID
-#PBS -q workq
 #PBS -l walltime=%(walltime)s
 
 set -e
 
-module load SNPmatch/1.7.2-foss-2016a-Python-2.7.11
+module load SNPmatch/2.0.0-foss-2018a-Python-2.7.14 
 
 cd "$WORK/GENOTYPER/$ID"
 

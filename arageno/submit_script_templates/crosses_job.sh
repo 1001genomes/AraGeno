@@ -4,7 +4,6 @@
 #PBS -N crosses_check
 #PBS -A %(crosses_job_id)s
 #PBS -v ID=%(id)s,JOB_ID=%(crosses_job_id)s,DATASET=%(dataset)s,TMPDIR=$WORK/GENOTYPER/$ID
-#PBS -q workq
 #PBS -l walltime=%(walltime)s
 
 set -e
@@ -12,7 +11,7 @@ set -e
 module use /net/gmi.oeaw.ac.at/software/mendel/intel-x86_64-sandybridge-avx/modules/datasets/
 
 module load matrices_for_snpmatch/1.0.0
-module load SNPmatch/1.7.2-foss-2016a-Python-2.7.11
+module load SNPmatch/2.0.0-foss-2018a-Python-2.7.14 
 
 
 cd "$WORK/GENOTYPER/$ID"
