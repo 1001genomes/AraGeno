@@ -134,7 +134,7 @@
             resultText.innerText='The file ' + files[0].name+' is '+ (isValid ? 'valid': 'invalid');
             if (isValid) {
                 submitBtn.removeAttribute('disabled');
-                dropZoneEle.children.genotype_file.files = files
+                dropZoneEle.children.genotype_file.files = files;
             }
         }
         dropZoneEle.style='display:'+ (hasFiles ? 'none' : 'block');

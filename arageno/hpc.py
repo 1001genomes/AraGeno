@@ -166,7 +166,7 @@ def submit_crosses_job(id,job_id):
 def get_crosses_job_result(id,job_id):
     """Returns the results from the crosses_check"""
     target_folder = _get_target_folder(id)
-    return json.loads(_read_file(id, '%s_crosses.txt.matches.json' % job_id))
+    return json.loads(_read_file(id, '%s_crosses.matches.json' % job_id))
 
 
 @roles('dmn')
@@ -177,8 +177,8 @@ def get_identify_job_result(id, identify_job_id):
     target_folder = _get_target_folder(id)
     output_path = '%s/%s.tsv' % (tempfile.gettempdir(),identify_job_id)
     with cd(target_folder):
-        get('%s.txt' % identify_job_id,output_path)
-    data = json.loads(_read_file(id, '%s.txt.matches.json' % identify_job_id))
+        get('%s.scores.txt' % identify_job_id,output_path)
+    data = json.loads(_read_file(id, '%s.matches.json' % identify_job_id))
     return data, output_path
 
 

@@ -370,7 +370,7 @@ class IdentifyJobQuerySet(models.QuerySet):
         """
         Returns the unfinished jobs
         """
-        RUNNING = [CREATED,QUEUED,PROCESSING]
+        RUNNING = [CREATED,QUEUED,PROCESSING,ERROR]
         return self.filter(status__in=RUNNING) | self.filter(status=FINISHED,crossesjob__status__in=RUNNING)
 
 @python_2_unicode_compatible
