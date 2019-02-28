@@ -1,3 +1,4 @@
 .vscode
 uploaded_genotypes
 *.sqlite3
+*.pyc
