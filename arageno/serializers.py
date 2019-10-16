@@ -4,10 +4,10 @@ Serializers for REST api views
 
 from django.urls import reverse
 from rest_framework import serializers
-from models import GenotypeSubmission, IdentifyJob, Dataset
+from .models import GenotypeSubmission, IdentifyJob, Dataset
 import json
 import logging
-from apps import AraGenoConfig
+from .apps import AraGenoConfig
 
 logger = logging.getLogger(__name__)
 

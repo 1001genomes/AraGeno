@@ -7,7 +7,7 @@ import os
 from abc import ABCMeta, abstractmethod, abstractproperty
 from datetime import datetime,timedelta
 from django.utils import timezone
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.db.models.signals import post_delete
@@ -68,8 +68,8 @@ def calculate_progress(start_date, end_date):
     """Calculats the progress"""
     if not end_date:
         return None
-    duration = abs(end_date - start_date).seconds
-    elapsed = abs(timezone.now() - start_date ).seconds
+    duration = (end_date - start_date).seconds
+    elapsed = (timezone.now() - start_date ).seconds
     if elapsed > duration:
         return 99
     return round((float(elapsed)/duration) * 100)
@@ -142,6 +142,7 @@ class Job(models.Model):
         choices=STATUS_CHOICES, default=CREATED, db_index=True)
     statistics = models.TextField(blank=True, null=True, db_column='data')
     _progress = models.PositiveSmallIntegerField(default=0,db_column='progress')
+    jobid = models.PositiveIntegerField(blank=True, null=True, db_index=True)
 
     class Meta:
         abstract = True
@@ -195,6 +196,7 @@ class Job(models.Model):
             return self._progress
         else:
             progress = calculate_progress(self.started,self.finish_date)
+            logger.info("Started: %s, FInished: %s. Progress: %s" % (self.started, self.finish_date,progress))
             if not progress:
                 return self._progress
             return progress

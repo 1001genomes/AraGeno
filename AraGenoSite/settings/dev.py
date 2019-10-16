@@ -3,7 +3,7 @@ Development settings using sqlite3 and DEBUG = TRUE
 """
 import os
 # Load defaults in order to then add/override with dev-only settings
-from defaults import *
+from .defaults import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

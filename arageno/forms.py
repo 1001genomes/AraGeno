@@ -4,9 +4,9 @@ Form and ModelForm definitions
 
 import os
 from django import forms
-from models import GenotypeSubmission, IdentifyJob
+from .models import GenotypeSubmission, IdentifyJob
 from django.db import transaction
-from services import create_identifyjobs , count_lines
+from .services import create_identifyjobs , count_lines
 
 
 SUPPORTED_EXTENSION = ('.vcf', '.bed')

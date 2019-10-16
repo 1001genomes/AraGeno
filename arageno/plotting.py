@@ -5,7 +5,7 @@ import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 import seaborn as sns
-from models import CrossesJob, FINISHED
+from .models import CrossesJob, FINISHED
 sns.set(style="whitegrid", color_codes=True)
 
 
@@ -46,6 +46,6 @@ def plot_crosses_data(crosses_job):
     ax.set_xticklabels([])
     ax.set_xticks(minor_ticks, minor=True)
     ax.set_xticklabels(chr_labels,minor=True)
-    
+
     return plt
 

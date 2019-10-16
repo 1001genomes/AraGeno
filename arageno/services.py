@@ -2,20 +2,19 @@
 Business logic/Service layer
 """
 
-from models import IdentifyJob, Dataset
+from .models import IdentifyJob, Dataset
 from django.core.mail import EmailMessage
 from django.db import transaction
-from hpc import identify_pipeline
+from .hpc import identify_pipeline, update_genotype_status
 from django.conf import settings
-from apps import AraGenoConfig
 import requests
 import logging
-import plotting
+from . import plotting
 import re
 import subprocess
 import shutil
 import tempfile
-from serializers import IdentifyJobSerializer
+from .serializers import IdentifyJobSerializer
 from rest_framework.renderers import JSONRenderer
 import zipfile
 
@@ -50,6 +49,10 @@ def start_identify_pipeline(genotype, send_email=True):
         )
         email.send(True)
 
+def update_submission(genotype):
+    if not genotype.identify_finished:
+        update_genotype_status(genotype)
+    return genotype
 
 
 def count_lines(filename):
@@ -57,9 +60,9 @@ def count_lines(filename):
     lines = None
     try:
         lines = subprocess.check_output(["wc", "-l", filename])
-        m = WC_REGEX.search(lines)
+        m = WC_REGEX.search(lines.decode())
         lines = int(m.group(0))
-    except subprocess.CalledProcessError, err:
+    except subprocess.CalledProcessError as err:
         logger.error(err)
     return lines
 
@@ -69,7 +72,7 @@ def create_download_zip(fp,job):
         dir_name = tempfile.mkdtemp()
         json = JSONRenderer().render(IdentifyJobSerializer(job).data)
         stats_file = '%s/stats.json' % dir_name
-        with open(stats_file,'w') as fp:
+        with open(stats_file,'wb') as fp:
             fp.write(json)
         zip_file.write(stats_file,'stats.json')
         # put files there

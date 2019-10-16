@@ -2,22 +2,23 @@
 Views for the rest API
 """
 from rest_framework import routers, serializers, viewsets, mixins, generics
-from rest_framework.decorators import detail_route, list_route, permission_classes
+from rest_framework.decorators import action, permission_classes
 import rest_framework.permissions as permissions
-from models import GenotypeSubmission, IdentifyJob, CrossesJob
-from serializers import GenotypeSubmissionSerializer, IdentifyJobSerializer, CrossesJobSerializer
+from .models import GenotypeSubmission, IdentifyJob, CrossesJob
+from .serializers import GenotypeSubmissionSerializer, IdentifyJobSerializer, CrossesJobSerializer
 from rest_framework.decorators import api_view, permission_classes, renderer_classes, parser_classes
 from rest_framework.parsers import FormParser,MultiPartParser
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from django.http import HttpResponseBadRequest, HttpResponse, Http404
 from django.db import transaction
-from models import GenotypeSubmission, IdentifyJob
-from plotting import plot_crosses_data
-from services import create_download_zip, start_identify_pipeline, create_identifyjobs, count_lines
+from .models import GenotypeSubmission, IdentifyJob
+from .plotting import plot_crosses_data
+from .services import create_download_zip, start_identify_pipeline, create_identifyjobs, count_lines, update_submission
 from wsgiref.util import FileWrapper
 import tempfile
 import zipfile
+from io import BytesIO
 
 
 class IsCreationOrIsAuthenticated(permissions.BasePermission):
@@ -38,13 +39,18 @@ class GenotypeSubmissionViewSet(mixins.CreateModelMixin,mixins.DestroyModelMixin
     authentication_classes = []
     parser_classes = (MultiPartParser,FormParser,)
 
+    def get_object(self):
+        obj = super(GenotypeSubmissionViewSet, self).get_object()
+        obj = update_submission(obj)
+        return obj
+
 
     def get_permissions(self):
         if self.action == 'list':
             self.permission_classes = [permissions.IsAdminUser,]
         elif self.action == 'create' or self.action == 'destroy':
             self.permission_classes = [IsCreationOrIsAuthenticated, ]
-        return super(self.__class__, self).get_permissions()
+        return super(GenotypeSubmissionViewSet, self).get_permissions()
 
     @transaction.atomic
     def perform_create(self, serializer):
@@ -66,7 +72,7 @@ class IdentifyJobViewSet(viewsets.ReadOnlyModelViewSet):
     def get_permissions(self):
         if self.action == 'list':
             self.permission_classes = [permissions.IsAdminUser,]
-        return super(self.__class__, self).get_permissions()
+        return super(IdentifyJobViewSet, self).get_permissions()
 
 
 class CrossesJobViewSet(viewsets.ReadOnlyModelViewSet):
@@ -77,7 +83,7 @@ class CrossesJobViewSet(viewsets.ReadOnlyModelViewSet):
     def get_permissions(self):
         if self.action == 'list':
             self.permission_classes = [permissions.IsAdminUser,]
-        return super(self.__class__, self).get_permissions()
+        return super(CrossesJobViewSet, self).get_permissions()
 
 
 @api_view(['GET'])
@@ -117,8 +123,9 @@ def plot_crosses_windows(request,pk,job_id,format=None):
         if str(job.genotype.id) != str(pk):
             raise Http404()
         plot = plot_crosses_data(job.crossesjob)
-        response = HttpResponse(content_type=content_type)
-        plot.savefig(response)
+        buf = BytesIO()
+        plot.savefig(buf,format=format)
+        response = HttpResponse(buf.getvalue(),content_type=content_type)
         return response
 
 @api_view(['GET'])

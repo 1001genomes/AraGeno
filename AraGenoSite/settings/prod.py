@@ -3,7 +3,7 @@ Production settings
 """
 # Load defaults in order to then add/override with dev-only settings
 import os
-from defaults import *
+from .defaults import *
 
 
 DATABASES = {

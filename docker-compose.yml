@@ -2,43 +2,20 @@ version: '3'
 services:
   web:
     restart: unless-stopped
-    build:
-      context: .
-      args:
-        - HPC_USER
-    working_dir: /code
-    entrypoint: /code/docker-entrypoint.sh
+    image: "docker.artifactory.imp.ac.at/the1001genomes/arageno:latest"
     volumes:
       - /usr/share/nginx/html/static:/srv/static
       - ${SSH_AUTH_SOCK}:/ssh-agent
-      - ./:/code
       - /usr/share/nginx/html/uploads/:/srv/uploads
+      - /srv/arageno/logs:/srv/logs
     ports:
       - "8000:8000"
     environment:
       - SSH_AUTH_SOCK=/ssh-agent
       - EMAIL_HOST=${EMAIL_HOST}
       - EMAIL_USER=${EMAIL_USER}
-      - DJANGO_SETTINGS_MODULE=AraGenoSite.settings.prod
-      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
-      - SECRET_KEY=${SECRET_KEY}
-      - ADMINS=${ADMINS}
-  hpc:
-    restart: unless-stopped
-    build:
-      context: .
-      args:
-        - HPC_USER
-    working_dir: /code
-    command: ./manage.py listen_job_queue '${BROKER}'
-    volumes:
-      - ${SSH_AUTH_SOCK}:/ssh-agent
-      - ./:/code
-      - /usr/share/nginx/html/uploads/:/srv/uploads
-    environment:
-      - SSH_AUTH_SOCK=/ssh-agent
-      - EMAIL_HOST=${EMAIL_HOST}
-      - EMAIL_USER=${EMAIL_USER}
+      - HPC_HOST=${HPC_HOST}
+      - HPC_USER=${HPC_USER}
       - DJANGO_SETTINGS_MODULE=AraGenoSite.settings.prod
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
       - SECRET_KEY=${SECRET_KEY}

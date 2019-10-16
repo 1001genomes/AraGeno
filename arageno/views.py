@@ -5,17 +5,16 @@ import os
 from django.shortcuts import render
 from django.conf import settings
 from django.http import HttpResponseRedirect
-from forms import UploadFileForm
-from django.core.urlresolvers import reverse, reverse_lazy
+from .forms import UploadFileForm
+from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView
 from django.db import transaction
 from django.views.generic.edit import DeleteView, UpdateView
-from models import GenotypeSubmission, delete_upload_folder
-from serializers import GenotypeSubmissionSerializer
+from .models import GenotypeSubmission, delete_upload_folder
+from .serializers import GenotypeSubmissionSerializer
 from djangorestframework_camel_case.render import CamelCaseJSONRenderer
-from services import start_identify_pipeline
+from .services import start_identify_pipeline
 import logging,traceback
-from hpc import FabricException
 
 
 logger = logging.getLogger(__name__)
@@ -69,8 +68,9 @@ class GenotypeSubmissionInfo(DetailView):
     template_name = 'submission_status.html'
 
     def get_context_data(self, **kwargs):
-        kwargs['object_json'] = CamelCaseJSONRenderer().render(
+        data = CamelCaseJSONRenderer().render(
             GenotypeSubmissionSerializer(self.object, context={'request': self.request}).data)
+        kwargs['object_json'] = data.decode()
         return super(GenotypeSubmissionInfo, self).get_context_data(**kwargs)
 
 

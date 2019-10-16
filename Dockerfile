@@ -1,20 +1,13 @@
-FROM python:2.7
-MAINTAINER Ümit Seren
+FROM python:3.6
 
-ENV PYTHONUNBUFFERED 1
+COPY requirements.txt .
 
-RUN mkdir /code
-WORKDIR /code
-VOLUME /code
+RUN pip install --no-cache-dir -r requirements.txt && pip install gunicorn
 
-ADD requirements.txt /code/
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt && pip install gunicorn
+COPY . /srv/web
+RUN chmod 755 /srv/web/docker-entrypoint.sh
+RUN mkdir /srv/logs
 
-ARG HPC_USER
-ENV HPC_USER=${HPC_USER}
-
-RUN mkdir -p /root/.ssh
-RUN echo "Host *\nUser ${HPC_USER}\n"> /root/.ssh/config
-
-
+WORKDIR /srv/web
+ENTRYPOINT ["/srv/web/docker-entrypoint.sh"]
+CMD ["manage.py"]

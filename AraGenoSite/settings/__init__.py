@@ -1,4 +1,4 @@
 """
 Default to DEV
 """
-from dev import *
+from .dev import *

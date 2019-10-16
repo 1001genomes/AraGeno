@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import logging.config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY','REPLACE_WITH_PROD_KEY')
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS','localhost').split()
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS','127.0.0.1').split()
 
 ADMINS = []
 
@@ -129,7 +130,7 @@ STATIC_ROOT = '/srv/static'
 MEDIA_ROOT = '/srv/uploads/'
 MEDIA_URL = '/uploads/'
 
-
+LOGGING_CONFIG = None
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -178,4 +179,4 @@ LOGGING = {
 ACCESSION_REST_INFO_URL = 'https://arapheno.1001genomes.org/rest/accession/{0}.json'
 ACCESSION_REST_MAP_URL = 'https://arapheno.1001genomes.org/rest/accession/list.json'
 HPC_USER = os.environ['HPC_USER']
-HPC_PROJECT = os.environ.get('HPC_PROJECT','genotyper')
+HPC_HOST = os.environ.get('HPC_HOST','cbe')
