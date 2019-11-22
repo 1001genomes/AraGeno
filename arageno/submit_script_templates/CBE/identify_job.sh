@@ -10,6 +10,6 @@ set -e
 
 module load snpmatch/3.0.1-foss-2018b-python-2.7.15
 export NUMEXPR_MAX_THREADS=272
-DATASET_FOLDER=$SCRATCHDIR/matrices_for_snpmatch/$DATASET
+DATASET_FOLDER=/scratch-cbe/shared/matrices_for_snpmatch/$DATASET
 snpmatch inbred -v -i $ID.npz -o $JOB_ID -d $DATASET_FOLDER/$DATASET.hdf5 -e $DATASET_FOLDER/$DATASET.acc.hdf5
 #sleep 5 && echo 'test' > $JOB_ID.txt && echo '{"matches": [{"2278": [0.9839400114088569, 7884, 0.9412607449856734], "6909": [0.99421713749268104, 7982, 0.9529608404966571]}], "interpretation": {"case": 2, "text": "An ambiguous sample: Accessions in top hits can be really close"}, "overlap": [0.7530342533489166, 8376]}' > $JOB_ID.txt.matches.json
