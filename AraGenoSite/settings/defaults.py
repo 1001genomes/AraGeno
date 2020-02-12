@@ -187,3 +187,4 @@ ACCESSION_REST_INFO_URL = 'https://arapheno.1001genomes.org/rest/accession/{0}.j
 ACCESSION_REST_MAP_URL = 'https://arapheno.1001genomes.org/rest/accession/list.json'
 HPC_USER = os.environ['HPC_USER']
 HPC_HOST = os.environ.get('HPC_HOST','cbe')
+SSH_KEY_FILENAME = os.environ.get('SSH_KEY_FILENAME', None)

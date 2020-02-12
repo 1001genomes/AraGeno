@@ -26,7 +26,12 @@ SLURM_STATUS_DICT = {'COMPLETED': FINISHED, 'RUNNING': PROCESSING, 'COMPLETING':
 BASE_DIR = '/scratch-cbe/users/%s/AraGeno/' % settings.HPC_USER
 SUBMIT_SCRIPT_FOLDER = os.path.join(os.path.dirname(__file__),'submit_script_templates/CBE/')
 
-c = Connection(settings.HPC_HOST, user=settings.HPC_USER)
+connect_kwargs=None
+
+if settings.SSH_KEY_FILENAME:
+    connect_kwargs = { "key_filename": settings.SSH_KEY_FILENAME}
+
+c = Connection(settings.HPC_HOST, user=settings.HPC_USER, connect_kwargs=connect_kwargs)
 
 
 WALLTIME_MULTIPLIER = 2
