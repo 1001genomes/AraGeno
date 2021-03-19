@@ -2,7 +2,7 @@ django==2.2.10
 fabric==2.5.0
 pylint==2.4.2
 pylint-django==2.0.11
-djangorestframework==3.10.3
+djangorestframework==3.11.2
 djangorestframework-camel-case==1.1.1
 requests==2.22.0
 seaborn==0.9.0
