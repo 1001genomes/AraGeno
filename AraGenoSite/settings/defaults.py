@@ -34,7 +34,7 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS','127.0.0.1').split()
 
 ADMINS = []
 
-DEFAULT_FROM_EMAIL='AraGeno <ara.geno@gmi.oeaw.ac.at>'
+DEFAULT_FROM_EMAIL='AraGeno <arageno@gmi.oeaw.ac.at>'
 
 # Application definition
 
